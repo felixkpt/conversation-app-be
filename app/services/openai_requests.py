@@ -6,12 +6,12 @@ from decouple import config
 openai.organization = config('OPEN_AI_ORG')
 openai.api_key = config('OPEN_AI_KEY')
 openai.ln = 'en'
-
 # Open AI - Whisper
 # Convert Audio to Text
 
 
 def convert_audio_to_text(audio_file):
+
     try:
         transcript = openai.Audio.transcribe('whisper-1', audio_file)
         message_text = transcript['text']
@@ -24,8 +24,8 @@ def convert_audio_to_text(audio_file):
 # Get response to our Messages
 
 
-def get_chat_response(message_content, sub_cat_id):
-    messages = get_recent_messages(sub_cat_id)
+def get_chat_response(message_content, sub_cat_id, mode):
+    messages, session_id = get_recent_messages(sub_cat_id, mode)
     user_message = {'role': 'user', 'content': message_content}
     messages.append(user_message)
 
@@ -36,7 +36,7 @@ def get_chat_response(message_content, sub_cat_id):
         )
 
         message_text = response['choices'][0]['message']['content']
-        return message_text
+        return message_text, session_id
 
     except Exception as e:
         print(e)

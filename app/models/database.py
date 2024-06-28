@@ -5,6 +5,9 @@ from app.models.subcategory import insert_sub_categories_from_json, insert_sub_c
 from app.models.conversation import add_message
 
 def setup_database(schema_file='app/database/schema.sql'):
+    insert_sub_categories_questions_from_json()
+    return
+
     # Execute the schema file to create tables
     execute_schema(schema_file)
     

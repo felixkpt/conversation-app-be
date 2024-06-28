@@ -42,32 +42,40 @@ CREATE TABLE IF NOT EXISTS questions (
     FOREIGN KEY (sub_category_id) REFERENCES sub_categories(id)
 );
 
-CREATE TABLE IF NOT EXISTS messages (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    category_id INT,
-    sub_category_id INT,
-    role ENUM('user', 'assistant'),
-    content TEXT,
-    audio_uri VARCHAR(255),
-    status_id INT DEFAULT 1,
-    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (category_id) REFERENCES categories(id),
-    FOREIGN KEY (sub_category_id) REFERENCES sub_categories(id)
-);
+
 
 -- table for interview session management
 CREATE TABLE IF NOT EXISTS interview_sessions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,  -- Assuming you have a user management system
     sub_category_id INT,
-    current_question_index INT DEFAULT 0,
+    current_question_id INT,
     status_id INT DEFAULT 1,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id),
     FOREIGN KEY (sub_category_id) REFERENCES sub_categories(id)
+);
+
+CREATE TABLE messages (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    category_id INT,
+    sub_category_id INT,
+    role ENUM('user', 'assistant'),
+    mode ENUM('training', 'interview'),
+    interview_session_id INT NULL,
+    question_id INT NULL,
+    question_scores INT NULL,
+    content TEXT,
+    audio_uri VARCHAR(255),
+    status_id INT DEFAULT 1,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (category_id) REFERENCES categories(id),
+    FOREIGN KEY (sub_category_id) REFERENCES sub_categories(id),
+    FOREIGN KEY (interview_session_id) REFERENCES interview_sessions(id) ON DELETE CASCADE
 );
 
 

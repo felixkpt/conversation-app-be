@@ -1,3 +1,4 @@
+# app/services/audio_handler.py
 import os
 from fastapi import HTTPException
 
@@ -13,8 +14,7 @@ def generate_id():
     return str(uuid.uuid4())
 
 
-def process_audio_and_return_combined_results(audio_input, sub_cat_id, my_info):
-
+def process_audio_and_return_combined_results(audio_input, sub_cat_id, my_info, mode='training'):
     # Ensure stored_audio folder exists
     cat_id = get_cat_id(sub_cat_id)
     audio_folder = f"storage/audio/cat-{cat_id}"
@@ -30,11 +30,11 @@ def process_audio_and_return_combined_results(audio_input, sub_cat_id, my_info):
         raise HTTPException(status_code=400, detail="Failed to decode audio")
 
     # Get ChatGPT Response
-    response_message = get_chat_response(
-        message_content=request_message, sub_cat_id=sub_cat_id)
+    response_message, session_id = get_chat_response(
+        message_content=request_message, sub_cat_id=sub_cat_id, mode=mode)
 
     assistant_id = generate_id()
-    # Get the file extension from the dowloaded file
+    # Get the file extension from the downloaded file
     file_extension = '.mp3'
 
     assistant_info = {'id': assistant_id,
@@ -46,7 +46,8 @@ def process_audio_and_return_combined_results(audio_input, sub_cat_id, my_info):
     # Save messages
     results = []
     if response_message:
-        results = store_messages(sub_cat_id, my_info, assistant_info)
+        results = store_messages(
+            sub_cat_id, my_info, assistant_info, mode, session_id)
         if results:
             my_info = results[0]
             assistant_info = results[1]

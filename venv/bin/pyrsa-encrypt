@@ -1,4 +1,4 @@
-#!/home/felix/Documents/Dev/python/conversation-app-be/venv/bin/python3
+#!/home/felix/Documents/Dev/python/conversation-app-be-v2/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys

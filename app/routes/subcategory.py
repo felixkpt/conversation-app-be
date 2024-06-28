@@ -45,8 +45,8 @@ async def update_sub_category_endpoint(sub_cat_id: int, sub_category: SubCategor
             status_code=500, detail=f"Failed to update sub-category: {e}")
 
 @router.get("/dashboard/categories/{cat_id}/sub-categories/{sub_cat_id}/questions")
-async def get_sub_category_questions(cat_id: str):
-    sub_cats = get_sub_cat_questions(cat_id)
+async def get_sub_category_questions(sub_cat_id: str):
+    sub_cats = get_sub_cat_questions(sub_cat_id)
     return sub_cats
 
 @router.post("/dashboard/categories/{cat_id}/sub-categories/{sub_cat_id}/questions")

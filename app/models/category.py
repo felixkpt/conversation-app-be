@@ -1,4 +1,3 @@
-# app/models/category.py
 from app.database.connection import execute_query, execute_insert
 import json
 
@@ -16,17 +15,20 @@ def update_category(category_id: int, category):
     execute_query(query, (category.name, category.description, category_id))
 
 def get_cats():
-    query = "SELECT * FROM categories where status_id = %s"
-    return execute_query(query,(1,))
+    query = "SELECT * FROM categories WHERE status_id = %s"
+    return execute_query(query, (1,))
 
 def get_cat(cat_id):
-    query = "SELECT * FROM categories WHERE id = %s and status_id = %s"
-    result = execute_query(query, (cat_id,1))
+    query = "SELECT * FROM categories WHERE id = %s AND status_id = %s"
+    result = execute_query(query, (cat_id, 1))
     return result[0] if result else False
 
-def get_cat_conversation(cat_id):
-    query = "SELECT * FROM messages WHERE category_id = %s and status_id = %s"
-    results = execute_query(query, (cat_id,1))
+def get_cat_conversation(cat_id, mode='training'):
+    if mode not in ['training', 'interview']:
+        raise ValueError("Mode must be either 'training' or 'interview'")
+
+    query = "SELECT * FROM messages WHERE category_id = %s AND mode = %s AND status_id = %s"
+    results = execute_query(query, (cat_id, mode, 1))
     return results
 
 def insert_categories_from_json():

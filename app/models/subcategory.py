@@ -77,9 +77,12 @@ def get_cat_id(sub_cat_id):
     return sub_cat['category_id'] if sub_cat else None
 
 
-def get_sub_cat_conversation(sub_cat_id):
-    query = "SELECT * FROM messages WHERE sub_category_id = %s and status_id = %s"
-    results = execute_query(query, (sub_cat_id, 1))
+def get_sub_cat_conversation(sub_cat_id, mode='training'):
+    if mode not in ['training', 'interview']:
+        raise ValueError("Mode must be either 'training' or 'interview'")
+
+    query = "SELECT * FROM messages WHERE sub_category_id = %s AND mode = %s AND status_id = %s"
+    results = execute_query(query, (sub_cat_id, mode, 1))
 
     return results
 
@@ -107,10 +110,12 @@ def get_question(question_id):
     result = execute_query(query, (question_id, 1))
     return result[0] if result else False
 
+
 def question_exists(sub_category_id: int, sub_cat_name: str) -> bool:
     query = "SELECT 1 FROM questions WHERE sub_category_id = %s AND question = %s"
     result = execute_query(query, (sub_category_id, sub_cat_name))
     return len(result) > 0
+
 
 def update_question(sub_category_id: int, question: QuestionRequest):
     query = "UPDATE questions SET question = %s, marks = %s WHERE id = %s"

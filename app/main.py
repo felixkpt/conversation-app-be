@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
-from app.routes import health, category, subcategory, conversation, audio, interview, auto_page_builder
+from app.routes import conversation, health, category, subcategory, audio, interview, auto_page_builder
 from app.models.database import setup_database
 
 app = FastAPI()
