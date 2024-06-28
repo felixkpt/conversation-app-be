@@ -3,4 +3,4 @@
 venv/
 storage/
 test.php
-.env2
+.env
