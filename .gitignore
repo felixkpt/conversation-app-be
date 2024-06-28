@@ -1,6 +1,6 @@
 # Byte-compiled / optimized / DLL files
 **/__pycache__/
-
+venv/
 storage/
 test.php
 .env2
